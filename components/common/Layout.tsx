@@ -1,5 +1,4 @@
 import { FC, ReactNode, useRef } from 'react';
-import { withAuthUser } from 'next-firebase-auth';
 import { Dialog } from '@headlessui/react';
 import { SignUpView } from '../auth';
 import Navbar from './NavBar';
@@ -37,15 +36,17 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         initialFocus={modalRef}
       >
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-        <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+        <div
+          className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl"
+          ref={modalRef}
+        >
           <Dialog.Title>{modalConfig.title}</Dialog.Title>
           <Dialog.Description>{modalConfig.description}</Dialog.Description>
           {modalConfig.content}
-          <div ref={modalRef}>Hi</div>
         </div>
       </Dialog>
     </div>
   );
 };
 
-export default withAuthUser()(Layout);
+export default Layout;

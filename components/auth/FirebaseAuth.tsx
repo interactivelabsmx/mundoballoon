@@ -49,7 +49,6 @@ const FirebaseAuth = (): JSX.Element => {
       setRenderAuth(true);
     }
   }, []);
-  console.log('Auth REndered');
   return (
     <div>
       {renderAuth ? (

@@ -70,7 +70,6 @@ export const ALL_POSTS_QUERY = gql`
       }
     }
   }
-
 `;
 
 export const allPostsQueryVars = {
@@ -78,7 +77,7 @@ export const allPostsQueryVars = {
 };
 
 export default function PostList() {
-  const { loading, error, data, networkStatus } = useQuery(
+  const { loading, error, data, networkStatus, refetch } = useQuery(
     ALL_POSTS_QUERY,
     {
       variables: allPostsQueryVars,
@@ -96,7 +95,7 @@ export default function PostList() {
 
   const { site } = data;
   const { featuredProducts } = site;
-
+  const onClick = () => refetch();
   return (
     <section>
       <ul>
@@ -109,6 +108,7 @@ export default function PostList() {
           </li>
         ))}
       </ul>
+      <button onClick={onClick}>refetch</button>
     </section>
   );
 }

@@ -1,27 +1,16 @@
 import 'tailwindcss/tailwind.css';
 
 import { AppProps } from 'next/app';
-import { ApolloProvider } from '@apollo/client';
-import { useApollo } from '../lib/apolloClient';
-
 import initAuth from '../lib/initAuth';
-import Layout from '../components/common/Layout';
-import { ManagedUIContext } from '../components/ui/context';
+import AppContexts from '../components/common/AppContexts';
 
 initAuth();
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
-  const apolloClient = useApollo(pageProps);
-
   return (
-    <>
-      <ApolloProvider client={apolloClient}>
-        <ManagedUIContext>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ManagedUIContext>
-      </ApolloProvider>
-    </>
+    // @ts-expect-error some wired issue with passing pageProps, might be try to remove later
+    <AppContexts pageProps={pageProps}>
+      <Component {...pageProps} />
+    </AppContexts>
   );
 }

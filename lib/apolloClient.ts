@@ -1,5 +1,10 @@
-import { useMemo } from 'react';
-import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 
@@ -7,19 +12,29 @@ export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
 let apolloClient;
 
-function createApolloClient() {
+function createApolloClient(getAccessToken: () => Promise<string>) {
+  const setAuthorizationLink = setContext(async (request, previousContext) => ({
+    headers: {
+      ...previousContext.headers,
+      authorization: `Bearer ${await getAccessToken()}`,
+    },
+  }));
+  const link = new HttpLink({
+    uri: 'https://localhost:5001/graphql/', // Server URL (must be absolute)
+    credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+  });
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
-      uri: 'https://localhost:5001/graphql/', // Server URL (must be absolute)
-      credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
-    }),
+    link: setAuthorizationLink.concat(link),
     cache: new InMemoryCache(),
   });
 }
 
-export function initializeApollo(initialState: any = null): ApolloClient<NormalizedCacheObject> {
-  const _apolloClient = apolloClient ?? createApolloClient();
+export function initializeApollo(
+  initialState: any = null,
+  getAccessToken: () => Promise<string>
+): ApolloClient<NormalizedCacheObject> {
+  const _apolloClient = apolloClient ?? createApolloClient(getAccessToken);
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state
   // gets hydrated here
@@ -49,7 +64,10 @@ export function initializeApollo(initialState: any = null): ApolloClient<Normali
   return _apolloClient;
 }
 
-export function addApolloState(client: ApolloClient<NormalizedCacheObject>, pageProps: any): any {
+export function addApolloState(
+  client: ApolloClient<NormalizedCacheObject>,
+  pageProps: any
+): any {
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
   }
@@ -57,8 +75,11 @@ export function addApolloState(client: ApolloClient<NormalizedCacheObject>, page
   return pageProps;
 }
 
-export function useApollo(pageProps: any): ApolloClient<NormalizedCacheObject> {
+export function useApollo(
+  pageProps: any,
+  getAccessToken: () => Promise<string>
+): ApolloClient<NormalizedCacheObject> {
   const state = pageProps[APOLLO_STATE_PROP_NAME];
-  const store = useMemo(() => initializeApollo(state), [state]);
+  const store = initializeApollo(state, getAccessToken);
   return store;
 }
