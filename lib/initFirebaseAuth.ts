@@ -1,6 +1,31 @@
 import { init } from 'next-firebase-auth';
+import firebase from 'firebase/app';
 
-const initAuth = () => {
+export const baseFirebaseUIAuthConfig = {
+  signInFlow: 'popup',
+  // Auth providers
+  // https://github.com/firebase/firebaseui-web#configure-oauth-providers
+  signInOptions: [
+    {
+      provider: firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+    },
+    {
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      requireDisplayName: false,
+    },
+    {
+      provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    },
+    {
+      provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      scopes: ['public_profile'],
+    },
+  ],
+  signInSuccessUrl: '/',
+  credentialHelper: 'none',
+};
+
+const initFirebaseAuth = () => {
   init({
     authPageURL: '/auth',
     appPageURL: '/',
@@ -36,4 +61,4 @@ const initAuth = () => {
   });
 };
 
-export default initAuth;
+export default initFirebaseAuth;

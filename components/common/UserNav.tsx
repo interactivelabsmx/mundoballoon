@@ -9,6 +9,7 @@ interface UserNavProps {
 const UserNav: FC<UserNavProps> = () => {
   const AuthUser = useAuthUser();
   const { openSignupModal } = useUI();
+  console.log(AuthUser);
   return (
     <nav>
       <div>
@@ -22,6 +23,7 @@ const UserNav: FC<UserNavProps> = () => {
               <button onClick={AuthUser.signOut}>Sign out</button>
             </li>
           )}
+          <li>UserID: {AuthUser.id}</li>
         </ul>
       </div>
     </nav>

@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { setAuthCookies } from 'next-firebase-auth';
-import initAuth from '../../lib/initAuth';
+import initFirebaseAuth from '../../lib/initFirebaseAuth';
 
-initAuth();
+initFirebaseAuth();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

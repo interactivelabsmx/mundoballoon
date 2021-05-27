@@ -1,10 +1,10 @@
 import 'tailwindcss/tailwind.css';
 
 import { AppProps } from 'next/app';
-import initAuth from '../lib/initAuth';
+import initFirebaseAuth from '../lib/initFirebaseAuth';
 import AppContexts from '../components/common/AppContexts';
 
-initAuth();
+initFirebaseAuth();
 
 export default function App({ Component, pageProps }: AppProps): JSX.Element {
   return (
