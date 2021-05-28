@@ -11,8 +11,7 @@
     "format": "prettier --write .",
     "lint": "eslint . --ext ts --ext tsx --ext js",
     "test": "jest",
-    "test-all": "yarn lint && yarn type-check && yarn test",
-    "ngrok": "npx ngrok http -bind-tls=true localhost:3000"
+    "test-all": "yarn lint && yarn type-check && yarn test"
   },
   "husky": {
     "hooks": {
@@ -59,7 +58,7 @@
     "husky": "^6.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.0.1",
-    "jest-watch-typeahead": "^0.6.4",
+    "jest-watch-typeahead": "^0.6.1",
     "lint-staged": "^11.0.0",
     "postcss": "^8.3.0",
     "prettier": "^2.0.2",
